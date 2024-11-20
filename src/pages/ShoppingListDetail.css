@@ -1,0 +1,17 @@
+.shopping-list-detail {
+    padding: 20px;
+}
+
+.shopping-list-detail ul {
+    list-style: none;
+    padding: 0;
+}
+
+.shopping-list-detail li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.shopping-list-detail li:last-child {
+    border-bottom: none;
+}

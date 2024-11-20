@@ -1,0 +1,22 @@
+.shopping-list-overview {
+    padding: 20px;
+}
+
+.list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.list-tile {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.list-tile:hover {
+    background-color: #e0f7fa;
+}

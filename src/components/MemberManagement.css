@@ -1,0 +1,14 @@
+.member-management {
+    margin-top: 20px;
+}
+
+.member-management ul {
+    list-style: none;
+    padding: 0;
+}
+
+.member-management li {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}

@@ -1,0 +1,107 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f3f8f3;
+    color: #333;
+}
+
+/* Login Container */
+.login {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Header */
+.login h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #28a745;
+}
+
+/* Input Fields */
+.login input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.login input:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+/* Buttons */
+.login button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login button:hover {
+    background-color: #218838;
+}
+
+.login button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Error Message */
+.login .error {
+    margin-top: 10px;
+    color: #dc3545;
+    font-size: 14px;
+}
+
+/* Register Link */
+.register-link {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+    .login {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .login h2 {
+        font-size: 20px;
+    }
+
+    .login input {
+        font-size: 14px;
+    }
+
+    .login button {
+        font-size: 14px;
+    }
+}
