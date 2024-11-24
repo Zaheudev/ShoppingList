@@ -1,16 +1,19 @@
-import React, { useContext, useState } from 'react';
-import ShoppingListCard from './ShoppingListCard';
-import NotificationPanel from './NotificationPanel';
-import AddItemForm from './AddItemForm';
-import { ShoppingListContext } from '../context/ShoppingListContext';
-import './Dashboard.css';
+import React, { useContext, useState } from "react";
+import ShoppingListCard from "./ShoppingListCard";
+import NotificationPanel from "./NotificationPanel";
+import AddItemForm from "./AddItemForm";
+import { ShoppingListContext } from "../context/ShoppingListContext";
+import "./Dashboard.css";
 
 const Dashboard = () => {
-  const { shoppingLists, addShoppingList } = useContext(ShoppingListContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const context = useContext(ShoppingListContext);
+
+  let list = context.shoppingLists;
+  let addShoppingList = context.addList;
 
   const handleAddList = (newList) => {
     addShoppingList(newList);
@@ -25,7 +28,7 @@ const Dashboard = () => {
       </div>
       <div className="dashboard-content">
         <div className="shopping-lists">
-          {shoppingLists.map((list) => (
+          {list.map((list) => (
             <ShoppingListCard key={list._id} list={list} />
           ))}
         </div>

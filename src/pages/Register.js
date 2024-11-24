@@ -13,7 +13,7 @@ const Register = () => {
     try {
       await registerUser(formData);
       setMessage('Registration successful! Redirecting to login...');
-      setTimeout(() => navigate('/login'), 2000);
+      setTimeout(() => navigate('/'), 2000);
     } catch (err) {
       setMessage(err.response?.data?.message || 'Registration failed. Please try again.');
     }

@@ -3,6 +3,9 @@ import axios from 'axios';
 // Set up the base URL for the API
 const API_BASE_URL = "http://localhost:5000/api"; // Update this if needed
 
+// config for sending the jwt token to pass the authmiddleware
+const config = { headers: {Authorization:"Bearer " + localStorage.getItem("authToken")}}
+
 /**
  * Generic API error handler
  */
@@ -22,7 +25,8 @@ const handleApiError = (error) => {
  */
 export const getShoppingLists = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/shoppingLists`);
+    const response = await axios.get(`${API_BASE_URL}/shoppingLists`, config);
+    console.log(response);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -34,7 +38,7 @@ export const getShoppingLists = async () => {
  */
 export const getShoppingList = async (listId) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/shoppingLists/${listId}`);
+    const response = await axios.get(`${API_BASE_URL}/shoppingLists/${listId}`, config);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -46,7 +50,7 @@ export const getShoppingList = async (listId) => {
  */
 export const createShoppingList = async (newList) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/shoppingLists`, newList);
+    const response = await axios.post(`${API_BASE_URL}/shoppingLists`,newList ,config);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -57,8 +61,9 @@ export const createShoppingList = async (newList) => {
  * Update an existing shopping list
  */
 export const updateShoppingList = async (listId, updates) => {
+  let config = { headers: {Authorization:"Bearer " + localStorage.getItem("authToken"), updates:updates}}
   try {
-    const response = await axios.patch(`${API_BASE_URL}/shoppingLists/${listId}`, updates);
+    const response = await axios.patch(`${API_BASE_URL}/shoppingLists/${listId}`, config);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -83,6 +88,7 @@ export const deleteShoppingList = async (listId) => {
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     handleApiError(error);

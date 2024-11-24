@@ -3,9 +3,10 @@ const ShoppingList = require('../models/ShoppingList');
 // Get all shopping lists
 exports.getShoppingLists = async (req, res) => {
   try {
+    console.log(req.user);
     const { archived } = req.query;
     const filter = {
-      $or: [{ ownerId: req.user._id }, { members: req.user._id }],
+      $or: [{ ownerId: req.user.id }, { members: req.user.id }],
     };
     if (archived !== undefined) filter.archived = archived === 'true';
 
@@ -23,7 +24,7 @@ exports.createShoppingList = async (req, res) => {
 
     const newList = new ShoppingList({
       title,
-      ownerId: req.user._id,
+      ownerId: req.user.id,
       members,
       items,
     });
