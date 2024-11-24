@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
-const http = require("http");
 const dotenv = require('dotenv');
 const shoppingListsRouter = require('./routes/shoppingLists');
 const itemsRouter = require('./routes/items');
@@ -49,5 +48,4 @@ app.use('/api/auth', authRouter);
 // Error Handling Middleware
 app.use(errorHandler);
 
-http.createServer(app).listen(PORT);
 module.exports = app;
