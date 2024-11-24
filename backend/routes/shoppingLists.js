@@ -7,6 +7,9 @@ const checkOwnership = require('../middleware/checkOwnership');
 // GET /api/shoppingLists - Retrieve all shopping lists the user has access to
 router.get('/', authenticate, shoppingListController.getShoppingLists);
 
+// GET /api/shoppingLists/:id - Retrieve shopping list with /:id if user has access to
+router.get('/:id', authenticate, shoppingListController.getShoppingList);
+
 // POST /api/shoppingLists - Create a new shopping list
 router.post('/', authenticate, shoppingListController.createShoppingList);
 

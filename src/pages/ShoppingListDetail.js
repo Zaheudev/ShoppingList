@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import './ShoppingListDetail.css';
 import axios from 'axios';
 import './ShoppingListDetail.css';
+import { getShoppingList } from '../utils/api'; 
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -14,8 +15,8 @@ const ShoppingListDetail = () => {
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/shoppingLists/${listId}`);
-        setShoppingList(response.data);
+        const response = await getShoppingList(listId);
+        setShoppingList(response[0]);
       } catch (err) {
         setError('Error fetching shopping list details');
       }
@@ -25,6 +26,8 @@ const ShoppingListDetail = () => {
 
   if (error) return <p className="error">{error}</p>;
   if (!shoppingList) return <p>Loading...</p>;
+
+  console.log(shoppingList);
 
   return (
     <div className="shopping-list-detail">

@@ -37,6 +37,7 @@ export const getShoppingLists = async () => {
  * Fetch a specific shopping list by ID
  */
 export const getShoppingList = async (listId) => {
+  console.log(config);
   try {
     const response = await axios.get(`${API_BASE_URL}/shoppingLists/${listId}`, config);
     return response.data;
@@ -61,9 +62,8 @@ export const createShoppingList = async (newList) => {
  * Update an existing shopping list
  */
 export const updateShoppingList = async (listId, updates) => {
-  let config = { headers: {Authorization:"Bearer " + localStorage.getItem("authToken"), updates:updates}}
   try {
-    const response = await axios.patch(`${API_BASE_URL}/shoppingLists/${listId}`, config);
+    const response = await axios.patch(`${API_BASE_URL}/shoppingLists/${listId}`, updates, config);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -75,7 +75,7 @@ export const updateShoppingList = async (listId, updates) => {
  */
 export const deleteShoppingList = async (listId) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/shoppingLists/${listId}`);
+    const response = await axios.delete(`${API_BASE_URL}/shoppingLists/${listId}`, listId, config);
     return response.data;
   } catch (error) {
     handleApiError(error);

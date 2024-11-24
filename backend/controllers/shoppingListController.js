@@ -3,10 +3,26 @@ const ShoppingList = require('../models/ShoppingList');
 // Get all shopping lists
 exports.getShoppingLists = async (req, res) => {
   try {
-    console.log(req.user);
+    // console.log(req.user);
     const { archived } = req.query;
     const filter = {
       $or: [{ ownerId: req.user.id }, { members: req.user.id }],
+    };
+    if (archived !== undefined) filter.archived = archived === 'true';
+
+    const lists = await ShoppingList.find(filter);
+    res.status(200).json(lists);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get a specific shopping list
+exports.getShoppingList = async (req, res) => {
+  try {
+    const { archived } = req.query;
+    const filter = {
+      $or: [{_id: req.url.replace("/", "")}],
     };
     if (archived !== undefined) filter.archived = archived === 'true';
 
