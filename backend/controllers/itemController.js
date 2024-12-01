@@ -1,19 +1,19 @@
 const ShoppingList = require('../models/ShoppingList');
 
 exports.addItem = async (req, res) => {
-  const { listId } = req.params;
-  const { name, dueDate } = req.body;
-
+  const listId  = req.params.id;
+  const { name, date } = req.body;
   try {
     const list = await ShoppingList.findById(listId);
     if (!list) return res.status(404).json({ message: 'Shopping list not found' });
 
     const newItem = {
-      _id: new mongoose.Types.ObjectId(),
+      listId,
       name,
       resolved: false,
-      dueDate,
+      date,
     };
+    console.log(name, date);
 
     list.items.push(newItem);
     await list.save();
@@ -21,6 +21,7 @@ exports.addItem = async (req, res) => {
     res.status(201).json({ message: 'Item added successfully', item: newItem });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
+    console.log(error);
   }
 };
 

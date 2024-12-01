@@ -35,14 +35,16 @@ exports.getShoppingList = async (req, res) => {
 
 // Create a new shopping list
 exports.createShoppingList = async (req, res) => {
+  console.log(req.body);
   try {
-    const { title, members, items } = req.body;
+    const { title, members, items, tags } = req.body;
 
     const newList = new ShoppingList({
       title,
       ownerId: req.user.id,
       members,
       items,
+      tags
     });
 
     await newList.save();

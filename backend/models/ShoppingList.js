@@ -12,6 +12,11 @@ const ShoppingListSchema = new mongoose.Schema(
         dueDate: { type: Date },
       },
     ],
+    tags: [
+      {
+        type: String
+      }
+    ],
     archived: { type: Boolean, default: false },
     status: { type: String, default: 'active' },
   },

@@ -1,22 +1,34 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ShoppingListCard from "./ShoppingListCard";
 import NotificationPanel from "./NotificationPanel";
 import AddItemForm from "./AddItemForm";
 import { ShoppingListContext } from "../context/ShoppingListContext";
 import "./Dashboard.css";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const context = useContext(ShoppingListContext);
+  
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const context = useContext(ShoppingListContext);
 
   let list = context.shoppingLists;
   let addShoppingList = context.addList;
+  let fetch = context.fetchLists;
+
+  useEffect(() => {
+    fetch().then((err) => {
+      if (err === 401) {
+        navigate('/');
+      }
+    });
+  }, []);
 
   const handleAddList = (newList) => {
     addShoppingList(newList);
+    fetch();
     closeModal();
   };
 
