@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ShoppingItem = ({ item, onToggle, onDelete }) => {
+const ShoppingItem = ({ item, onToggle, onDelete}) => {
   return (
-    <div className="shopping-item">
+    <li className="shopping-item">
       <span
         style={{
           textDecoration: item.resolved ? 'line-through' : 'none',
@@ -10,11 +10,11 @@ const ShoppingItem = ({ item, onToggle, onDelete }) => {
       >
         {item.name}
       </span>
-      <button onClick={() => onToggle(item.id)}>
+      <button onClick={() => onToggle(item._id)}>
         {item.resolved ? 'Unresolve' : 'Resolve'}
       </button>
-      <button onClick={() => onDelete(item.id)}>Delete</button>
-    </div>
+      <button onClick={() => onDelete(item._id)}>Delete</button>
+    </li>
   );
 };
 

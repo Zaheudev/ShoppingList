@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./ShoppingListDetail.css";
-import { getShoppingList, deleteShoppingList, addNewItems } from "../utils/api";
+import { getShoppingList, deleteShoppingList, addNewItems, deleteItem, resolveItem } from "../utils/api";
 import ItemField from "../components/ItemField";
+import ShoppingItem from "../components/ShoppingItem";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -59,6 +60,26 @@ const ShoppingListDetail = () => {
     setItems([...items]);
   };
 
+  const toggle = async (e) => {
+    try{
+      const response = await resolveItem(listId, e);
+      fetchList();
+      console.log(response);
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+  const deleteItemBtn = async (e) => {
+    try {
+      const response = await deleteItem(listId, e);
+      fetchList();
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(items);
@@ -68,11 +89,11 @@ const ShoppingListDetail = () => {
         .forEach(async (item) => {
           const response = await addNewItems(listId, item);
           console.log(response);
+          fetchList();
         });
-    } catch (err) {
+      } catch (err) {
       setError(err.message || "Error creating new items.");
     }
-    fetchList();
     setOpenForm(false);
   };
 
@@ -85,9 +106,7 @@ const ShoppingListDetail = () => {
       <h1>{shoppingList.title}</h1>
       <ul>
         {shoppingList.items.map((item) => (
-          <li key={item._id}>
-            {item.name} - {item.resolved ? "Resolved" : "Unresolved"}
-          </li>
+          <ShoppingItem item={item} key={item._id} onToggle={toggle} onDelete={deleteItemBtn}/>
         ))}
       </ul>
       <button onClick={deleteList}>Delete List</button>

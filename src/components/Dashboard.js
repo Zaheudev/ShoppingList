@@ -28,7 +28,6 @@ const Dashboard = () => {
 
   const handleAddList = (newList) => {
     addShoppingList(newList);
-    fetch();
     closeModal();
   };
 

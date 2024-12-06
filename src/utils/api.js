@@ -119,11 +119,23 @@ export const addNewItems = async (listId, items) => {
   }
 };
 
+/**
+ * deletes a given item from the invoked list 
+ */
 export const deleteItem = async (listId, item) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/items/${listId}`, item, config(), {params: listId, item});
+    const response = await axios.delete(`${API_BASE_URL}/items/${listId}/${item}`, config(), item);
     return response.data;
   } catch (error) {
+    handleApiError(error);
+  }
+}
+
+export const resolveItem = async (listId, item) => {
+  try {
+    const response = await axios.patch(`${API_BASE_URL}/items/${listId}/${item}`, item, config());
+    return response.data;
+  }catch(error){
     handleApiError(error);
   }
 }
