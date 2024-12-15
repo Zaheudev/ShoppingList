@@ -26,7 +26,7 @@ const handleApiError = (error) => {
 export const getShoppingLists = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/shoppingLists`, config());
-    console.log(response);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -87,7 +87,7 @@ export const deleteShoppingList = async (listId) => {
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -176,4 +176,5 @@ export default {
   registerUser,
   getNotifications,
   markNotificationAsRead,
+  addNewItems
 };
