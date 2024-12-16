@@ -23,9 +23,9 @@ const handleApiError = (error) => {
 /**
  * Fetch all shopping lists
  */
-export const getShoppingLists = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/shoppingLists`, config());
+export const getShoppingLists = async (token) => {
+    try {
+    const response = await axios.get(`${API_BASE_URL}/shoppingLists`, token ? token : config());
     // console.log(response.data);
     return response.data;
   } catch (error) {
@@ -36,9 +36,9 @@ export const getShoppingLists = async () => {
 /**
  * Fetch a specific shopping list by ID
  */
-export const getShoppingList = async (listId) => {
+export const getShoppingList = async (listId, token) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/shoppingLists/${listId}`, config());
+    const response = await axios.get(`${API_BASE_URL}/shoppingLists/${listId}`, token ? token : config());
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -48,9 +48,9 @@ export const getShoppingList = async (listId) => {
 /**
  * Create a new shopping list
  */
-export const createShoppingList = async (newList) => {
+export const createShoppingList = async (newList, token) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/shoppingLists`,newList ,config());
+    const response = await axios.post(`${API_BASE_URL}/shoppingLists`,newList ,token ? token : config());
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -60,9 +60,9 @@ export const createShoppingList = async (newList) => {
 /**
  * Update an existing shopping list
  */
-export const updateShoppingList = async (listId, updates) => {
+export const updateShoppingList = async (listId, updates, token) => {
   try {
-    const response = await axios.patch(`${API_BASE_URL}/shoppingLists/${listId}`, updates, config());
+    const response = await axios.patch(`${API_BASE_URL}/shoppingLists/${listId}`, updates, token ? token : config());
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -72,9 +72,9 @@ export const updateShoppingList = async (listId, updates) => {
 /**
  * Delete a shopping list by ID
  */
-export const deleteShoppingList = async (listId) => {
+export const deleteShoppingList = async (listId, token) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/shoppingLists/${listId}`, config(), {params: listId});
+    const response = await axios.delete(`${API_BASE_URL}/shoppingLists/${listId}`, token ? token : config(), {params: listId});
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -110,9 +110,9 @@ export const registerUser = async (userData) => {
  * creates new Items for a certain shopping list
  */
 
-export const addNewItems = async (listId, items) => {
+export const addNewItems = async (listId, items, token) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/items/${listId}`, items, config(), {params: listId});
+    const response = await axios.post(`${API_BASE_URL}/items/${listId}`, items, token ? token : config(), {params: listId});
     return response.data;
   } catch (error) {
     handleApiError(error);
