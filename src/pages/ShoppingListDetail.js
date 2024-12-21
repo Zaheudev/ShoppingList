@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./ShoppingListDetail.css";
-import { getShoppingList, deleteShoppingList, addNewItems, deleteItem, resolveItem } from "../utils/api";
+import {
+  getShoppingList,
+  deleteShoppingList,
+  addNewItems,
+  deleteItem,
+  resolveItem,
+  inviteMember,
+} from "../utils/api";
 import ItemField from "../components/ItemField";
 import ShoppingItem from "../components/ShoppingItem";
+import AddMemberField from "../components/AddMemberField";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -12,8 +20,10 @@ const ShoppingListDetail = () => {
   const [shoppingList, setShoppingList] = useState(null);
   const [error, setError] = useState(null);
   const [deleted, setDeleted] = useState(false);
-  const [openForm, setOpenForm] = useState(false);
+  const [openItemForm, setOpenItemForm] = useState(false);
+  const [openMembersForm, setOpenMembersForm] = useState(false);
   const [items, setItems] = useState([{ name: null, date: null }]);
+  const [members, setMembers] = useState([null]);
 
   const fetchList = async () => {
     try {
@@ -60,15 +70,33 @@ const ShoppingListDetail = () => {
     setItems([...items]);
   };
 
+  const addNewMember = () => {
+    members.push(null);
+    setMembers([...members]);
+  };
+
+  const removeNewMember = (e) => {
+    members[e.target.id] = -1;
+    setMembers([...members]);
+  };
+
+  const updateNewMember = (e) => {
+    // target[0] it's "name" or "date"
+    //target[1] it's any index from 0 to count.length-1;
+    let target = e.target.id;
+    members[target] = e.target.value;
+    setMembers([...members]);
+  };
+
   const toggle = async (e) => {
-    try{
+    try {
       const response = await resolveItem(listId, e);
       fetchList();
       console.log(response);
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const deleteItemBtn = async (e) => {
     try {
@@ -78,9 +106,9 @@ const ShoppingListDetail = () => {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmitItems = async (e) => {
     e.preventDefault();
     console.log(items);
     try {
@@ -91,10 +119,26 @@ const ShoppingListDetail = () => {
           console.log(response);
           fetchList();
         });
-      } catch (err) {
+    } catch (err) {
       setError(err.message || "Error creating new items.");
     }
-    setOpenForm(false);
+    setOpenItemForm(false);
+  };
+
+  const handleSubmitMembers = async (e) => {
+    e.preventDefault();
+    console.log(members);
+    try {
+      members
+        .filter((e) => e !== -1)
+        .forEach(async (member) => {
+          const response = await inviteMember(listId, member);
+          console.log(response);
+        });
+    } catch (err) {
+      setError(err.message || "Error inviting new members.");
+    }
+    setOpenMembersForm(false);
   };
 
   if (error) return <p className="error">{error}</p>;
@@ -106,13 +150,19 @@ const ShoppingListDetail = () => {
       <h1>{shoppingList.title}</h1>
       <ul>
         {shoppingList.items.map((item) => (
-          <ShoppingItem item={item} key={item._id} onToggle={toggle} onDelete={deleteItemBtn}/>
+          <ShoppingItem
+            item={item}
+            key={item._id}
+            onToggle={toggle}
+            onDelete={deleteItemBtn}
+          />
         ))}
       </ul>
       <button onClick={deleteList}>Delete List</button>
-      <button onClick={() => setOpenForm(true)}>Add New Items</button>
-      {openForm && (
-        <form onSubmit={handleSubmit}>
+      <button onClick={() => setOpenItemForm(true)}>Add New Items</button>
+      <button onClick={() => setOpenMembersForm(true)}>Invite Members</button>
+      {openItemForm && (
+        <form onSubmit={handleSubmitItems}>
           <h2>
             Add Item{" "}
             <button type="button" onClick={addNewItem}>
@@ -132,7 +182,36 @@ const ShoppingListDetail = () => {
             }
           })}
           <button type="submit">Update</button>
-          <button type="button" onClick={() => setOpenForm(false)}>Cancel</button>
+          <button type="button" onClick={() => setOpenItemForm(false)}>
+            Cancel
+          </button>
+        </form>
+      )}
+
+      {openMembersForm && (
+        <form onSubmit={handleSubmitMembers}>
+          <h2>
+            Add Member{" "}
+            <button type="button" onClick={addNewMember}>
+              +
+            </button>
+          </h2>
+          {members.map((val, index) => {
+            if (val !== -1) {
+              return (
+                <AddMemberField
+                  key={index}
+                  remove={removeNewMember}
+                  id={index}
+                  update={updateNewMember}
+                />
+              );
+            }
+          })}
+          <button type="submit">Update</button>
+          <button type="button" onClick={() => setOpenMembersForm(false)}>
+            Cancel
+          </button>
         </form>
       )}
     </div>

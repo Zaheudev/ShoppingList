@@ -14,8 +14,8 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const userData = await loginUser(email, password);
-      login(userData);
+      const user = await loginUser(email, password);
+      login(user);
       navigate('/dashboard'); // Redirect to the dashboard
     } catch (err) {
       setError('Invalid credentials. Please try again.');

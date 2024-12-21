@@ -6,6 +6,7 @@ const shoppingListsRouter = require('./routes/shoppingLists');
 const itemsRouter = require('./routes/items');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
+const notifications = require('./routes/notifications');
 const errorHandler = require('./middleware/errorHandler');
 
 // Load environment variables
@@ -43,6 +44,7 @@ app.get('/', (req, res) => {
 app.use('/api/shoppingLists', shoppingListsRouter);
 app.use('/api/items', itemsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/notifications', notifications);
 app.use('/api/auth', authRouter);
 
 // Error Handling Middleware

@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Authenticated user details
   const [notifications, setNotifications] = useState([]); // User notifications
 
-  const login = (userData) => {
+  const login = async (userData) => {
     auth.setAuthToken(userData.token, userData.user.id);
     setUser(userData);
   };

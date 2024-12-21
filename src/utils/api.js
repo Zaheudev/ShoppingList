@@ -87,7 +87,7 @@ export const deleteShoppingList = async (listId, token) => {
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
-    // console.log(response.data);
+    // const notifications = await axios.get(`${API_BASE_URL}/notifications`, config());
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -110,9 +110,42 @@ export const registerUser = async (userData) => {
  * creates new Items for a certain shopping list
  */
 
-export const addNewItems = async (listId, items, token) => {
+export const addNewItems = async (listId, item, token) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/items/${listId}`, items, token ? token : config(), {params: listId});
+    const response = await axios.post(`${API_BASE_URL}/items/${listId}`, item, token ? token : config(), {params: listId});
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+/**
+ * accepts an invite to a shopping list
+ */
+export const acceptInvite = async (notification) => {
+  try {
+    const response = await axios.patch(`${API_BASE_URL}/users`, {notification}, config());
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+/**
+ * refuses an invite to a shopping list
+ */
+export const refuseInvite = async (notification) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/notifications/${notification}`, config(), {params: notification});
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+export const inviteMember = async (listId, email) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/notifications/${listId}`, {email}, config());
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -131,6 +164,9 @@ export const deleteItem = async (listId, item) => {
   }
 }
 
+/**
+ * Set an item unsolved or solved. 
+ */
 export const resolveItem = async (listId, item) => {
   try {
     const response = await axios.patch(`${API_BASE_URL}/items/${listId}/${item}`, item, config());
@@ -145,7 +181,7 @@ export const resolveItem = async (listId, item) => {
  */
 export const getNotifications = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/notifications`);
+    const response = await axios.get(`${API_BASE_URL}/notifications`, config());
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -176,5 +212,7 @@ export default {
   registerUser,
   getNotifications,
   markNotificationAsRead,
-  addNewItems
+  addNewItems,
+  acceptInvite,
+  refuseInvite
 };

@@ -1,4 +1,6 @@
-const ShoppingList = require('../models/ShoppingList');
+const ShoppingList = require("../models/ShoppingList");
+const User = require("../models/User");
+const Notification = require("../models/Notification");
 
 // Get all shopping lists
 exports.getShoppingLists = async (req, res) => {
@@ -8,7 +10,7 @@ exports.getShoppingLists = async (req, res) => {
     const filter = {
       $or: [{ ownerId: req.user.id }, { members: req.user.id }],
     };
-    if (archived !== undefined) filter.archived = archived === 'true';
+    if (archived !== undefined) filter.archived = archived === "true";
 
     const lists = await ShoppingList.find(filter);
     res.status(200).json(lists);
@@ -22,9 +24,9 @@ exports.getShoppingList = async (req, res) => {
   try {
     const { archived } = req.query;
     const filter = {
-      $or: [{_id: req.url.replace("/", "")}],
+      $or: [{ _id: req.url.replace("/", "") }],
     };
-    if (archived !== undefined) filter.archived = archived === 'true';
+    if (archived !== undefined) filter.archived = archived === "true";
 
     const lists = await ShoppingList.find(filter);
     res.status(200).json(lists);
@@ -35,22 +37,37 @@ exports.getShoppingList = async (req, res) => {
 
 // Create a new shopping list
 exports.createShoppingList = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const { title, members, items, tags } = req.body;
+    const user = await User.findById(req.user.id);
 
     const newList = new ShoppingList({
       title,
       ownerId: req.user.id,
-      members,
       items,
-      tags
+      tags,
     });
 
+    user.createdLists.push(newList);
+    await user.save();
     await newList.save();
+    members.forEach(async (email) => {
+      //sending invites to list here
+      const invited = await User.findOne({ email });
+      if (invited) {
+        const notification = new Notification({
+          userId: invited,
+          listId: newList._id,
+          message: `You've got an invitation to join the Shopping list with name: ${newList.title} from the owner`,
+        });
+        await notification.save();
+      }
+    });
     res.status(201).json(newList);
   } catch (error) {
     res.status(500).json({ error: error.message });
+    console.log(error);
   }
 };
 
@@ -58,6 +75,13 @@ exports.createShoppingList = async (req, res) => {
 exports.deleteShoppingList = async (req, res) => {
   try {
     await ShoppingList.findByIdAndDelete(req.params.id);
+    const user = await User.findById(req.user.id);
+    for(let i=0; i<user.createdLists.length; i++){
+      if(user.createdLists[i]._id.toString() === req.params.id){
+        user.createdLists.splice(i,1);
+      }
+    }
+    await user.save();
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -70,7 +94,8 @@ exports.updateShoppingList = async (req, res) => {
     const { archived, status } = req.body;
     const list = await ShoppingList.findById(req.params.id);
 
-    if (!list) return res.status(404).json({ error: 'Shopping list not found' });
+    if (!list)
+      return res.status(404).json({ error: "Shopping list not found" });
 
     if (archived !== undefined) list.archived = archived;
     if (status !== undefined) list.status = status;
